@@ -7,34 +7,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include "Adj_List.h"
+#include "utils.h"
 
 #define NUMBER_OF_COLORS 4
 #define NO_COLOR -1
-#define BLUE 0
-#define RED 1
-#define YELLOW 2
-#define GREEN 3
 
-#define TAMSTATE 	50
+
 #define COEF		3
-/*---------------------------------Estruturas-----------------------------------------
--------------------------------------------------------------------------------------*/
-typedef struct transcTable 
-{
-	int id;						// identificacao do nome
-	char state[TAMSTATE];		// nome
-	struct transcTable *ptr;	// ponteiro para outro no (caso colisoes)	
-}TranscTable;
-
-
-
-/*----------------------------Variaveis Globais---------------------------------------
-------------------------------------------------------------------------------------*/
-TranscTable *vectorTable;		// vetor que transcrevera nomes para numeros (id`s)
-char *idState[TAMSTATE];		// vetor que contem os estados, seu indice eh seu id
-int ID = 0;						// ids de atribuicao
-
-
 
 /*---------------------------------Funcoes--------------------------------------------
 ------------------------------------------------------------------------------------*/
@@ -303,28 +282,6 @@ int graphColoring(vetNode *graph, int length, int *vetColor, char flag)
     return(1);
 }
 
-void printVetColor(int *vetColor, int length)						// imprime resultado conforme vetor traduzido idState
-{
-    int i;
-    for(i=0; i<length; i++)
-    {
-        printf("%s:", idState[i]);
-        if(vetColor[i] == BLUE)
-            printf(" Azul.\n");
-        else if(vetColor[i] == RED)
-            printf(" Vermelho.\n");
-        else if(vetColor[i] == YELLOW)
-            printf(" Amarelo.\n");
-        else if(vetColor[i] == GREEN)
-            printf(" Verde.\n");
-    }
-}
-
-
-
-
-
-
 /*----------------------------------M A I N------------------------------------------
 ------------------------------------------------------------------------------------*/
 int main(int argc, char *argv[])
@@ -354,7 +311,7 @@ int main(int argc, char *argv[])
 
 
 	fscanf(fileIN, "%d %c", &n, &heuristFlag);						// le os vertices e a heuristica
-	printf("n = %d\nflag = %c", n, heuristFlag);
+	// printf("n = %d\nflag = %c\n", n, heuristFlag);
 
 
 	vectorTable = (TranscTable*)malloc((n*COEF)*sizeof(TranscTable));		// aloca o vetor de transcricao
@@ -416,7 +373,7 @@ int main(int argc, char *argv[])
 		vetColor[i] = NO_COLOR;								// atribuo cor nenhuma a todos
 
 	graphColoring(restritionGraph, n, vetColor, 'd');		// B A C K T R A C K I G 
-	printVetColor(vetColor,n);								// imprime saida
+	printVetColor(vetColor,n);						// imprime saida
 
 	return(1);
 }
