@@ -1,6 +1,8 @@
 #ifndef UTILS
 #define UTILS
 
+#include "Adj_List.h"
+
 #define BLUE 0
 #define RED 1
 #define YELLOW 2
@@ -26,4 +28,5 @@ extern int ID;						// ids de atribuicao
 /*---------------------------------Funcoes--------------------------------------------
 ------------------------------------------------------------------------------------*/
 void printVetColor(const int *vetColor, const int length);
+Grafo *readGraph(int argc, char **argv);
 #endif

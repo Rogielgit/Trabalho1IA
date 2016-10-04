@@ -41,6 +41,13 @@ typedef struct vetNode
 	linkedList *ptr;
 }
 vetNode;
+
+typedef struct grafo 
+{
+	vetNode *vertices;
+	int n;
+}
+Grafo;
 /*-----------------------------------*/
 
 
@@ -53,6 +60,9 @@ linkedList *createList();
 
 /*--Inicializa Lista de Adjacencia (vetor de tamanho @lin ligados a listas)--*/
 vetNode* createAdjList(int A);
+
+/*--Cria grafo de tamanho A--*/
+Grafo* createGraph(int A);
 
 /*--Insere na lista ligada ordenadamente--*/
 void insertListSorted(linkedList *L, int B, int weight);

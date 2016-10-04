@@ -28,6 +28,12 @@ vetNode* createAdjList(int A)
 	
 	return(vet);
 }
+Grafo* createGraph(int A){
+	Grafo *grafo = MALLOC(Grafo, 1);
+	grafo->vertices = createAdjList(A);
+	grafo->n = A;
+	return grafo;
+}
 
 /*--Insere na lista ligada ordenadamente--*/
 void insertListSorted(linkedList *L, int B, int weight)
