@@ -1,1 +1,1 @@
-# Trabalho1IA
+Busca cega com BACKTRACKIG. 

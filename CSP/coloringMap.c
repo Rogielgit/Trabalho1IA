@@ -1,7 +1,6 @@
 /************************************************************************
-*						Projeto 1: Coloring Map								*
-*			Sistema utilizado para desenvolvimento: Windows				*
-*						Disciplina SCC0218								*
+*						Trabalho 1: Coloração de Mapas					*
+*			Sistema utilizado para desenvolvimento: Linux				*
 *************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
@@ -114,7 +113,7 @@ int isSafe(int v, vetNode *graph, int *vetColor, int color)
     return(1);								//retorna verdadeiro
 }
 
-int graphColoringUtil(vetNode *graph, int *vetColor, int length, int v,  char flag, int *possibilitiesVector)
+int graphColoringUtil(vetNode *graph, int *vetColor, int length, int v, int *possibilitiesVector)
 {
 
 
@@ -124,80 +123,35 @@ int graphColoringUtil(vetNode *graph, int *vetColor, int length, int v,  char fl
     if (v == length)
         return(1);
     
-    for (i=0; i<NUMBER_OF_COLORS; i++) 
+    for (i=0; i<NUMBER_OF_COLORS; i++) // busca com Verificação adiante,MVR e Grau de desempate
     {
-   	
-        if (flag == 'a')// sem poda, sem heuristica, busca cega.
-        { 
-            vetColor[v] = i;
-            ok = 1;
-            
-            listNode *aux;
-            aux = graph[v].ptr->first;				// primeiro adjacente a v
-            while(aux != NULL)						// enquanto existirem vertices
-            {
-                if (i == vetColor[aux->B])
-                {
- 					ok = 0;
-                    break;                	
-                }
-                aux = aux->next;
-            }
-            										// chama funcao recursivamente para o proximo
-            if (ok && graphColoringUtil(graph, vetColor, length, v+1, flag, possibilitiesVector)) 
-                return (1);
-            
-            vetColor[v] = NO_COLOR;					// senao, despinte o vertice
-        }
-        
-        
-        else if (flag == 'b' && isSafe(v, graph, vetColor, i)) // busca com verificação a diante
-        {	
-            vetColor[v] = i;
-            
-            if (graphColoringUtil(graph, vetColor, length, v+1, flag, possibilitiesVector)) {
-                return (1);
-            }
-            
-            vetColor[v] = NO_COLOR;
-        }
-    
-        
-        else if (flag == 'c' || flag == 'd')					//mvr ou maxGrau(se empate)
+   	                
+        ID = minorPossMaxGrade(graph, possibilitiesVector, length);
+
+        listNode *aux;
+        aux = graph[ID].ptr->first;
+        while (aux != NULL)
         {
-            if (flag == 'c')
-                ID = minorPoss(possibilitiesVector, length);
-            
-            
-            else if (flag == 'd')
-                ID = minorPossMaxGrade(graph, possibilitiesVector, length);
-            
-            
-            listNode *aux;
-            aux = graph[ID].ptr->first;
-            while (aux != NULL)
-            {
-                if(possibilitiesVector[aux->B] != (length+1))
-                	possibilitiesVector[aux->B]--;
-               	aux = aux->next;
-            }
-            
-            if (isSafe(ID, graph, vetColor, i)) {
-                possibilitiesVector[ID] = length+1;
-                vetColor[ID] = i;
-                
-                if (graphColoringUtil(graph, vetColor, length, v+1, flag, possibilitiesVector))
-                    return (1);
-                
-                vetColor[ID] = NO_COLOR;
-            }
-        }  
-    }
-    
+            if(possibilitiesVector[aux->B] != (length+1))
+            	possibilitiesVector[aux->B]--;
+           	aux = aux->next;
+        }
+
+        if (isSafe(ID, graph, vetColor, i)) {
+            possibilitiesVector[ID] = length+1;
+            vetColor[ID] = i;
+        
+            if (graphColoringUtil(graph, vetColor, length, v+1, possibilitiesVector))
+                return (1);
+        
+            vetColor[ID] = NO_COLOR;
+        }
+    }  
+        
     return(0);
 }
 
-int graphColoring(vetNode *graph, int length, int *vetColor, char flag)
+int graphColoring(vetNode *graph, int length, int *vetColor)
 {
     int i;
     int possibilitiesVector[length];												// vetor de possibilidades de um vertice
@@ -206,7 +160,7 @@ int graphColoring(vetNode *graph, int length, int *vetColor, char flag)
         possibilitiesVector[i] = NUMBER_OF_COLORS;									// inicia com todas as possibilidades
     }
     
-   	if(graphColoringUtil(graph, vetColor, length, 0, flag, possibilitiesVector))	// chama funcao recursiva
+   	if(graphColoringUtil(graph, vetColor, length, 0, possibilitiesVector))	// chama funcao recursiva
         return(0);																	// nao eh possivel achar uma solucao
     return(1);
 }
@@ -221,7 +175,7 @@ int main(int argc, char *argv[])
     for(i=0; i<graph->n; i++)
         vetColor[i] = NO_COLOR;							// atribuo cor nenhuma a todos
 
-	graphColoring(graph->vertices, graph->n, vetColor, 'd');	// B A C K T R A C K I G 
+	graphColoring(graph->vertices, graph->n, vetColor);	
 	printVetColor(vetColor,graph->n);							// imprime saida
 
 	return(1);
