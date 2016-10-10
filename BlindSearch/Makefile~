@@ -1,5 +1,0 @@
-all:
-	@gcc -std=c99 Adj_List.c utils.c blindSearch.c -o blindSearch
-    
-run:
-	@./blindSearch

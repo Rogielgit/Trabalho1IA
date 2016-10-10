@@ -1,1 +1,0 @@
-Busca cega com BACKTRACKIG. 
